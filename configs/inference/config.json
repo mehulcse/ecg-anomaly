@@ -2,7 +2,7 @@
   "exp_name":"ECGNet",
   "type": "Runner2D",
   "device": "cpu",
-  "model": "HeartNet",
+  "model": "ECGNet",
   "model_path": "./experiments/ECGNet/checkpoints/00000000.pth",
   "json": "data/val.json",
   "mapping_json": "data/class-mapper.json",
