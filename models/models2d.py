@@ -1,11 +1,9 @@
 import torch.nn as nn
-from efficientnet_pytorch import EfficientNet as efficientnet
-from torchvision import models
 
 
-class HeartNet(nn.Module):
+class ECGNet(nn.Module):
     def __init__(self, num_classes=7):
-        super(HeartNet, self).__init__()
+        super(ECGNet, self).__init__()
 
         self.features = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
@@ -44,43 +42,3 @@ class HeartNet(nn.Module):
         x = x.view(x.size(0), 16 * 16 * 256)
         x = self.classifier(x)
         return x
-
-
-class MobileNetV2(models.MobileNetV2):
-    def __init__(self, num_classes=8):
-        super().__init__(num_classes=num_classes)
-
-
-class AlexNet(models.AlexNet):
-    def __init__(self, num_classes=8):
-        super().__init__(num_classes=num_classes)
-
-
-def VGG16(num_classes=8):
-    model = models.vgg16_bn()
-    model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, num_classes)
-    return model
-
-
-def ResNet18(num_classes=8):
-    model = models.resnet18()
-    model.fc = nn.Linear(model.fc.in_features, num_classes)
-    return model
-
-
-def ResNet34(num_classes=8):
-    model = models.resnet34()
-    model.fc = nn.Linear(model.fc.in_features, num_classes)
-    return model
-
-
-def ShuffleNet(num_classes=8):
-    model = models.shufflenet_v2_x1_0()
-    model.fc = nn.Linear(model.fc.in_features, num_classes)
-    return model
-
-
-def EfficientNetB4(num_classes=8):
-    model = efficientnet.from_name("efficientnet-b4")
-    model._fc = nn.Linear(model._fc.in_features, num_classes)
-    return model

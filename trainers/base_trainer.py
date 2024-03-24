@@ -5,9 +5,8 @@ from datetime import datetime
 import numpy as np
 import torch
 from torch import nn, optim
-from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
-
+import time
 from utils.network_utils import load_checkpoint, save_checkpoint
 
 
@@ -23,7 +22,7 @@ class BaseTrainer:
         os.makedirs(self.log_dir, exist_ok=True)
         os.makedirs(self.pth_dir, exist_ok=True)
 
-        self.writer = SummaryWriter(log_dir=self.log_dir)
+        # self.writer = SummaryWriter(log_dir=self.log_dir)
 
         self.model = self._init_net()
         self.optimizer = self._init_optimizer()
@@ -86,9 +85,9 @@ class BaseTrainer:
                     % (i + 1, len(self.train_loader), loss.item()),
                 )
 
-            self.writer.add_scalar(
-                "Train loss (iterations)", loss.item(), self.total_iter,
-            )
+            # self.writer.add_scalar(
+            #     "Train loss (iterations)", loss.item(), self.total_iter,
+            # )
             self.total_iter += 1
 
         total_loss /= len(self.train_loader)
@@ -97,10 +96,10 @@ class BaseTrainer:
         print("Train loss - {:4f}".format(total_loss))
         print("Train CLASS accuracy - {:4f}".format(class_accuracy))
 
-        self.writer.add_scalar("Train loss (epochs)", total_loss, self.training_epoch)
-        self.writer.add_scalar(
-            "Train CLASS accuracy", class_accuracy, self.training_epoch,
-        )
+        # self.writer.add_scalar("Train loss (epochs)", total_loss, self.training_epoch)
+        # self.writer.add_scalar(
+        #     "Train CLASS accuracy", class_accuracy, self.training_epoch,
+        # )
 
     def val(self):
         self.model.eval()
@@ -130,14 +129,15 @@ class BaseTrainer:
         print("Validation loss - {:4f}".format(total_loss))
         print("Validation CLASS accuracy - {:4f}".format(class_accuracy))
 
-        self.writer.add_scalar("Validation loss", total_loss, self.training_epoch)
-        self.writer.add_scalar(
-            "Validation CLASS accuracy", class_accuracy, self.training_epoch,
-        )
+        # self.writer.add_scalar("Validation loss", total_loss, self.training_epoch)
+        # self.writer.add_scalar(
+        #     "Validation CLASS accuracy", class_accuracy, self.training_epoch,
+        # )
 
     def loop(self):
+        start_time = time.time()
         for epoch in range(self.training_epoch, self.epochs):
-            print("Epoch - {}".format(self.training_epoch + 1))
+            print(f"Epoch - {self.training_epoch + 1}")
             self.train_epoch()
             save_checkpoint(
                 {
@@ -149,5 +149,6 @@ class BaseTrainer:
                 osp.join(self.pth_dir, "{:0>8}.pth".format(epoch)),
             )
             self.val()
-
+            epoch_time = time.time() - start_time
+            print(f"Epoch {epoch+1} time: {epoch_time} seconds")
             self.training_epoch += 1

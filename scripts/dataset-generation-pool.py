@@ -17,5 +17,5 @@ def run(file):
 
 
 if __name__ == "__main__":
-    p = mp.Pool(processes=mp.cpu_count())
+    p = mp.Pool(processes=mp.cpu_count()) # running multiprocessing for data preparation
     p.map(run, ecg_data)

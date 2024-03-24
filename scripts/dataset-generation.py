@@ -70,13 +70,9 @@ if __name__ == "__main__":
                 raise Exception("Wrong mode in script beginning")
 
             if np.all([left > 0, right < len(signal)]):
-                one_dim_data_dir = osp.join(output_dir, "1D", name, sig_name, label)
                 two_dim_data_dir = osp.join(output_dir, "2D", name, sig_name, label)
-                os.makedirs(one_dim_data_dir, exist_ok=True)
                 os.makedirs(two_dim_data_dir, exist_ok=True)
 
-                filename = osp.join(one_dim_data_dir, "{}.npy".format(peak))
-                np.save(filename, signal[left:right])
                 filename = osp.join(two_dim_data_dir, "{}.png".format(peak))
 
                 plot(signal[left:right], filename)
