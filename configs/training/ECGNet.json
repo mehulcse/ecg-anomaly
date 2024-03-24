@@ -15,6 +15,6 @@
   },
   "num_workers": 3,
   "exp_dir" : "experiments/",
-  "model_path": "experiments/ECGNet/checkpoints/00000001.pth",
+  "model_path": 0,
   "epochs": 1
 }
